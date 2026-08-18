@@ -998,11 +998,27 @@ abstract class AppLocalizations {
   /// **'Join unavailable'**
   String get roomJoinCooldown;
 
-  /// No description provided for @roomAudienceWithMembers.
+  /// No description provided for @roomPresenceSummary.
   ///
   /// In en, this message translates to:
-  /// **'{viewerCount} online / {memberCount} members'**
-  String roomAudienceWithMembers(int viewerCount, int memberCount);
+  /// **'Online: {onlineMembers} members · {onlineGuests} guests'**
+  String roomPresenceSummary(int onlineMembers, int onlineGuests);
+
+  /// No description provided for @roomOnlineTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Online: {count}'**
+  String roomOnlineTotal(int count);
+
+  /// No description provided for @roomPresenceWithMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'{onlineMembers} members online · {onlineGuests} guests online · {memberCount} members total'**
+  String roomPresenceWithMembers(
+    int onlineMembers,
+    int onlineGuests,
+    int memberCount,
+  );
 
   /// No description provided for @roomConnections.
   ///
@@ -7439,8 +7455,8 @@ abstract class AppLocalizations {
   /// No description provided for @roomMemberUpdateSummary.
   ///
   /// In en, this message translates to:
-  /// **'{members, plural, =1{1 member} other{{members} members}} · Updated {time}'**
-  String roomMemberUpdateSummary(int members, String time);
+  /// **'{online} online · {members, plural, =1{1 member} other{{members} members}} · Updated {time}'**
+  String roomMemberUpdateSummary(int online, int members, String time);
 
   /// No description provided for @open.
   ///
@@ -9140,11 +9156,17 @@ abstract class AppLocalizations {
   /// **'Active users'**
   String get activeUsers;
 
-  /// No description provided for @onlineUsers.
+  /// No description provided for @onlineMembersLabel.
   ///
   /// In en, this message translates to:
-  /// **'Online users'**
-  String get onlineUsers;
+  /// **'Online members'**
+  String get onlineMembersLabel;
+
+  /// No description provided for @onlineGuestsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Online guests'**
+  String get onlineGuestsLabel;
 
   /// No description provided for @bannedUsers.
   ///

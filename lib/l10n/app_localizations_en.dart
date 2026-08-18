@@ -526,8 +526,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get roomJoinCooldown => 'Join unavailable';
 
   @override
-  String roomAudienceWithMembers(int viewerCount, int memberCount) {
-    return '$viewerCount online / $memberCount members';
+  String roomPresenceSummary(int onlineMembers, int onlineGuests) {
+    return 'Online: $onlineMembers members · $onlineGuests guests';
+  }
+
+  @override
+  String roomOnlineTotal(int count) {
+    return 'Online: $count';
+  }
+
+  @override
+  String roomPresenceWithMembers(
+    int onlineMembers,
+    int onlineGuests,
+    int memberCount,
+  ) {
+    return '$onlineMembers members online · $onlineGuests guests online · $memberCount members total';
   }
 
   @override
@@ -4332,14 +4346,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get review => 'Review';
 
   @override
-  String roomMemberUpdateSummary(int members, String time) {
+  String roomMemberUpdateSummary(int online, int members, String time) {
     String _temp0 = intl.Intl.pluralLogic(
       members,
       locale: localeName,
       other: '$members members',
       one: '1 member',
     );
-    return '$_temp0 · Updated $time';
+    return '$online online · $_temp0 · Updated $time';
   }
 
   @override
@@ -5350,7 +5364,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeUsers => 'Active users';
 
   @override
-  String get onlineUsers => 'Online users';
+  String get onlineMembersLabel => 'Online members';
+
+  @override
+  String get onlineGuestsLabel => 'Online guests';
 
   @override
   String get bannedUsers => 'Banned users';

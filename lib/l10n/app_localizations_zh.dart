@@ -497,8 +497,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get roomJoinCooldown => '暂时无法加入';
 
   @override
-  String roomAudienceWithMembers(int viewerCount, int memberCount) {
-    return '在线 $viewerCount / 成员 $memberCount';
+  String roomPresenceSummary(int onlineMembers, int onlineGuests) {
+    return '在线：成员 $onlineMembers · 游客 $onlineGuests';
+  }
+
+  @override
+  String roomOnlineTotal(int count) {
+    return '在线：$count';
+  }
+
+  @override
+  String roomPresenceWithMembers(
+    int onlineMembers,
+    int onlineGuests,
+    int memberCount,
+  ) {
+    return '在线成员 $onlineMembers · 在线游客 $onlineGuests · 共 $memberCount 名成员';
   }
 
   @override
@@ -4057,8 +4071,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get review => '审核';
 
   @override
-  String roomMemberUpdateSummary(int members, String time) {
-    return '成员 $members · 更新 $time';
+  String roomMemberUpdateSummary(int online, int members, String time) {
+    return '在线 $online · 成员 $members · 更新 $time';
   }
 
   @override
@@ -5030,7 +5044,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get activeUsers => '活跃用户';
 
   @override
-  String get onlineUsers => '在线用户';
+  String get onlineMembersLabel => '在线成员';
+
+  @override
+  String get onlineGuestsLabel => '在线游客';
 
   @override
   String get bannedUsers => '封禁用户';
