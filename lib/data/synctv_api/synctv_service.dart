@@ -1062,12 +1062,16 @@ class SyncTvService {
     required String name,
     String parentId = '',
     String description = '',
+    client_enum.PlaylistBrowseAccessMode browseAccessMode = client_enum
+        .PlaylistBrowseAccessMode
+        .PLAYLIST_BROWSE_ACCESS_MODE_DEFAULT,
   }) async {
     return _domains.roomMedia.createPlaylist(
       roomId,
       name: name,
       parentId: parentId,
       description: description,
+      browseAccessMode: browseAccessMode,
     );
   }
 
@@ -1093,6 +1097,7 @@ class SyncTvService {
     required String name,
     String? description,
     source_config.PlaylistSourceConfig? sourceConfig,
+    client_enum.PlaylistBrowseAccessMode? browseAccessMode,
   }) async {
     return _domains.roomMedia.updatePlaylist(
       roomId,
@@ -1100,6 +1105,7 @@ class SyncTvService {
       name: name,
       description: description,
       sourceConfig: sourceConfig,
+      browseAccessMode: browseAccessMode,
     );
   }
 
