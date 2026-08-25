@@ -397,6 +397,25 @@ final class SyncTvAdminGateway implements AdminGateway {
   );
 
   @override
+  Future<void> adminModerateRoomChatUser(
+    String roomId,
+    String userId, {
+    required bool deleteAllMessages,
+    required bool deleteAllReactions,
+    required bool ban,
+    String messageId = '',
+    String reason = '',
+  }) => SyncTvService.adminModerateRoomChatUser(
+    roomId,
+    userId,
+    deleteAllMessages: deleteAllMessages,
+    deleteAllReactions: deleteAllReactions,
+    ban: ban,
+    messageId: messageId,
+    reason: reason,
+  );
+
+  @override
   Future<AdminSliceCacheOperationResult> adminPurgeSliceCache({
     String nodeId = '',
     bool allNodes = false,
