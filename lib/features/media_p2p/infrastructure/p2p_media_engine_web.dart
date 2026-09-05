@@ -101,13 +101,14 @@ class P2pMediaEngine implements P2pMediaPlaybackEngine {
     required String format,
   }) async {
     _ensureReady();
+    final manifestKind = p2pManifestKind(format, upstream);
     final resource = _register(
       upstream: upstream,
       headers: headers,
       swarmId: swarmId,
       logicalKey: 'root',
       format: format,
-      shareable: true,
+      shareable: manifestKind == P2pManifestKind.progressive,
     );
     return _uri(resource);
   }
@@ -206,7 +207,10 @@ class P2pMediaEngine implements P2pMediaPlaybackEngine {
         );
         resource = resource.copyWith(
           upstream: resource.upstream.resolve(relative.toString()),
-          logicalKey: '${resource.logicalKey}:${relative.toString()}',
+          logicalKey: p2pDirectoryChildLogicalKey(
+            resource.logicalKey,
+            relative,
+          ),
           isDirectory: false,
         );
       }

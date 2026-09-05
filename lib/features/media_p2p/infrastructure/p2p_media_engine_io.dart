@@ -127,13 +127,14 @@ class P2pMediaEngine implements P2pMediaPlaybackEngine {
   }) async {
     if (_disposed) throw StateError('P2P media engine has been disposed');
     await _ensureServer();
+    final manifestKind = p2pManifestKind(format, upstream);
     final resource = _registerResource(
       upstream: upstream,
       headers: headers,
       swarmId: swarmId,
       logicalKey: 'root',
-      shareable: true,
-      manifestKind: p2pManifestKind(format, upstream),
+      shareable: manifestKind == P2pManifestKind.progressive,
+      manifestKind: manifestKind,
       isDirectory: false,
     );
     return _localUri(resource);
@@ -1789,7 +1790,7 @@ class P2pMediaEngine implements P2pMediaPlaybackEngine {
       upstream: directory.upstream.resolve(relative.toString()),
       headers: directory.headers,
       swarmId: directory.swarmId,
-      logicalKey: '${directory.logicalKey}:${relative.toString()}',
+      logicalKey: p2pDirectoryChildLogicalKey(directory.logicalKey, relative),
       shareable: true,
       manifestKind: _P2pManifestKind.progressive,
       isDirectory: false,
