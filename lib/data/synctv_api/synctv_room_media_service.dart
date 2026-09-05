@@ -497,24 +497,6 @@ class SyncTvRoomMediaDomainService {
     return chatHistoryPageFromProto(response);
   }
 
-  Future<ChatHistoryPage> getChatHistoryAsAdmin(
-    String roomId, {
-    int limit = 50,
-    String cursor = '',
-    List<client_enum.ChatMessageType> includeMessageTypes =
-        chatTimelineMessageTypes,
-  }) async {
-    final response = await _api.adminService.getRoomChatHistory(
-      roomId,
-      client.GetChatHistoryRequest(
-        limit: limit,
-        cursor: cursor,
-        includeMessageTypes: includeMessageTypes,
-      ),
-    );
-    return chatHistoryPageFromProto(response);
-  }
-
   ChatHistoryPage chatHistoryPageFromProto(
     client.GetChatHistoryResponse response,
   ) {
@@ -842,25 +824,6 @@ class SyncTvRoomMediaDomainService {
     return _chatMessageContextFromProto(response);
   }
 
-  Future<ChatMessageContextInfo> getChatMessageContextAsAdmin(
-    String roomId,
-    String messageId, {
-    int beforeLimit = 20,
-    int afterLimit = 20,
-    bool includeDeleted = false,
-  }) async {
-    final response = await _api.adminService.getRoomChatMessageContext(
-      roomId,
-      client.GetChatMessageContextRequest(
-        messageId: messageId,
-        beforeLimit: beforeLimit,
-        afterLimit: afterLimit,
-        includeDeleted: includeDeleted,
-      ),
-    );
-    return _chatMessageContextFromProto(response);
-  }
-
   ChatMessageContextInfo _chatMessageContextFromProto(
     client.GetChatMessageContextResponse response,
   ) {
@@ -951,16 +914,9 @@ class SyncTvRoomMediaDomainService {
   }
 
   StoredImageInfo storedImageFromChatAttachment(client.ChatAttachment image) {
-    return StoredImageInfo(
-      id: image.id,
-      storageBackend: '',
-      objectKey: '',
-      url: _api.resolveResourceUrl(image.url),
-      mimeType: image.mimeType,
-      sizeBytes: image.sizeBytes.toInt(),
-      width: image.width,
-      height: image.height,
-      metadata: utf8.encode(jsonEncode(fileMetadataToJson(image.metadata))),
+    return StoredImageInfo.fromChatAttachment(
+      image,
+      resolveUrl: _api.resolveResourceUrl,
     );
   }
 
@@ -1018,11 +974,7 @@ class SyncTvRoomMediaDomainService {
       streamKey: response.streamKey,
       whipUrl: response.whipUrl,
       expiresAt: response.hasExpiresAt() ? response.expiresAt.toInt() : null,
-      keyType:
-          response.type ==
-              client_enum.PublishKeyType.PUBLISH_KEY_TYPE_UNSPECIFIED
-          ? client_enum.PublishKeyType.PUBLISH_KEY_TYPE_SINGLE_USE
-          : response.type,
+      keyType: response.type,
     );
   }
 
@@ -1218,35 +1170,9 @@ class SyncTvRoomMediaDomainService {
   }
 
   RoomChatMessageInfo _chatMessageFromProto(client.ChatMessageReceive message) {
-    return RoomChatMessageInfo(
-      id: message.id,
-      roomId: message.roomId,
-      userId: message.userId,
-      username: message.hasUsername() ? message.username : null,
-      content: message.content,
-      timestamp: message.timestamp.toInt(),
-      messageType: message.messageType,
-      displayPosition: message.displayPosition,
-      displayColor: message.displayColor,
-      version: message.version.toInt(),
-      editedAt: message.editedAt.toInt(),
-      deletedAt: message.deletedAt.toInt(),
-      status: message.status,
-      replyToMessageId: message.replyToMessageId,
-      images: message.attachments.map(storedImageFromChatAttachment).toList(),
-      reactions: message.reactions.map(_chatReactionSummaryFromProto).toList(),
-      reactionCount: message.reactionCount,
-      mentions: message.mentions
-          .map(
-            (mention) => ChatMentionInfo(
-              userId: mention.userId,
-              username: mention.username,
-              start: mention.start,
-              length: mention.length,
-            ),
-          )
-          .toList(),
-      pin: message.hasPin() ? _chatPinFromProto(message.pin) : null,
+    return RoomChatMessageInfo.fromProto(
+      message,
+      resolveUrl: _api.resolveResourceUrl,
     );
   }
 
@@ -1265,33 +1191,9 @@ class SyncTvRoomMediaDomainService {
   }
 
   ChatPinEventInfo _chatPinEventFromProto(client.ChatPinEvent event) {
-    return ChatPinEventInfo(
-      eventId: event.eventId,
-      roomId: event.roomId,
-      kind: event.kind,
-      message: _chatMessageFromProto(event.message),
-      pin: event.hasPin() ? _chatPinFromProto(event.pin) : null,
-      occurredAt: event.occurredAt.toInt(),
-      sequence: event.sequence.toInt(),
-    );
-  }
-
-  ChatPinInfo _chatPinFromProto(client.ChatMessagePin pin) {
-    return ChatPinInfo(
-      pinnedByUserId: pin.pinnedByUserId,
-      pinnedByUsername: pin.pinnedByUsername,
-      note: pin.note,
-      pinnedAt: pin.pinnedAt.toInt(),
-    );
-  }
-
-  ChatReactionSummaryInfo _chatReactionSummaryFromProto(
-    client.ChatReactionSummary reaction,
-  ) {
-    return ChatReactionSummaryInfo(
-      key: reaction.key,
-      count: reaction.count.toInt(),
-      reactedByMe: reaction.reactedByMe,
+    return ChatPinEventInfo.fromProto(
+      event,
+      resolveUrl: _api.resolveResourceUrl,
     );
   }
 
